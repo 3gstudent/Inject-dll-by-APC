@@ -43,11 +43,6 @@ void main()
 		wchar_t buffer[] = L"c:\\test\\testdll.dll";
 		printf("WriteProcessMemory\n");
 		::WriteProcessMemory(hProcess, p, buffer, sizeof(buffer), nullptr);
-
-		WCHAR strKernel32[] = { 'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l', L'\0' };
-		CHAR strLoadLibraryW[] = { 'L', 'o', 'a', 'd', 'L', 'i', 'b', 'r', 'a', 'r', 'y', 'W', 0x0 };
-
-
 		for (const auto& tid : tids) 
 		{
 			printf("OpenThread\n");
@@ -55,10 +50,7 @@ void main()
 			if (hThread) 
 			{
 				printf("GetProcAddress\n");
-			//	::QueueUserAPC((PAPCFUNC)::GetProcAddress(GetModuleHandle(L"kernel32"), "LoadLibraryW"), hThread, (ULONG_PTR)p);
-				::QueueUserAPC((PAPCFUNC)::GetProcAddress(GetModuleHandle(strKernel32),strLoadLibraryW), hThread, (ULONG_PTR)p);
-
-			
+				::QueueUserAPC((PAPCFUNC)::GetProcAddress(GetModuleHandle(L"kernel32"), "LoadLibraryW"), hThread, (ULONG_PTR)p);	
 			}
 		}
 		printf("VirtualFreeEx\n");
