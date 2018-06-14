@@ -51,10 +51,9 @@ int dll_inject(DWORD dwProcessID, const char *pDllName)
 int dll_free(DWORD dwProcessID, const char *pDllName)
 {
 	BOOL bMore = FALSE, bFound = FALSE;
-	HANDLE hSnapshot, hProcess, hThread;
+	HANDLE hSnapshot;
 	HMODULE hModule = NULL;
 	MODULEENTRY32 me = { sizeof(me) };
-	LPTHREAD_START_ROUTINE pThreadProc;
 	BOOL bSuccess = FALSE;
 
 	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, dwProcessID);
