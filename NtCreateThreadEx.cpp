@@ -1,3 +1,7 @@
+//Use NtCreateThreadEx to inject dll
+
+#include "stdafx.h"
+
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
@@ -167,7 +171,7 @@ BOOL EnableDebugPrivilege(BOOL fEnable)
 
 int main(int argc, char *argv[])
 {
-	
+	printf("Use NtCreateThreadEx to inject dll\n");
 	if (!EnableDebugPrivilege(TRUE))
 	{
 		printf("[!]AdjustTokenPrivileges Failed.<%d>\n", GetLastError());
