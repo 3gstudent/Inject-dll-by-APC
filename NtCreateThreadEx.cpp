@@ -52,19 +52,19 @@ BOOL InjectDll(UINT32 ProcessId, char *DllFullPath)
 		return FALSE;
 	}
 
-	UINT32    DllFullPathLength = (strlen(DllFullPath) + 1);
-	PVOID     DllFullPathBufferData = VirtualAllocEx(ProcessHandle, NULL, DllFullPathLength, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+	UINT32 DllFullPathLength = (strlen(DllFullPath) + 1);
+	PVOID DllFullPathBufferData = VirtualAllocEx(ProcessHandle, NULL, DllFullPathLength, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 	if (DllFullPathBufferData == NULL)
 	{
 		CloseHandle(ProcessHandle);
 		printf("[!]DllFullPathBufferData error\n");
 		return FALSE;
 	}
-	SIZE_T    ReturnLength;
+	SIZE_T ReturnLength;
 	BOOL bOk = WriteProcessMemory(ProcessHandle, DllFullPathBufferData, DllFullPath, strlen(DllFullPath) + 1, &ReturnLength);
 
-	LPTHREAD_START_ROUTINE    LoadLibraryAddress = NULL;
-	HMODULE                    Kernel32Module = GetModuleHandle("Kernel32");
+	LPTHREAD_START_ROUTINE LoadLibraryAddress = NULL;
+	HMODULE Kernel32Module = GetModuleHandle("Kernel32");
 	LoadLibraryAddress = (LPTHREAD_START_ROUTINE)GetProcAddress(Kernel32Module, "LoadLibraryA");
 	pfnNtCreateThreadEx NtCreateThreadEx = (pfnNtCreateThreadEx)GetProcAddress(GetModuleHandle("ntdll.dll"), "NtCreateThreadEx");
 	if (NtCreateThreadEx == NULL)
@@ -102,8 +102,8 @@ BOOL FreeDll(UINT32 ProcessId, char *DllFullPath)
 	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, ProcessId);
 	bMore = Module32First(hSnapshot, &me);
 	for (; bMore; bMore = Module32Next(hSnapshot, &me)) {
-		if (!_tcsicmp((LPCTSTR)me.szModule, DllFullPath) ||
-			!_tcsicmp((LPCTSTR)me.szExePath, DllFullPath)) {
+		if (!_tcsicmp((LPCTSTR)me.szModule, DllFullPath) ||!_tcsicmp((LPCTSTR)me.szExePath, DllFullPath)) 
+		{
 			bFound = TRUE;
 			break;
 		}
@@ -123,8 +123,8 @@ BOOL FreeDll(UINT32 ProcessId, char *DllFullPath)
 		return FALSE;
 	}
 
-	LPTHREAD_START_ROUTINE    FreeLibraryAddress = NULL;
-	HMODULE                    Kernel32Module = GetModuleHandle("Kernel32");
+	LPTHREAD_START_ROUTINE FreeLibraryAddress = NULL;
+	HMODULE Kernel32Module = GetModuleHandle("Kernel32");
 	FreeLibraryAddress = (LPTHREAD_START_ROUTINE)GetProcAddress(Kernel32Module, "FreeLibrary");
 	pfnNtCreateThreadEx NtCreateThreadEx = (pfnNtCreateThreadEx)GetProcAddress(GetModuleHandle("ntdll.dll"), "NtCreateThreadEx");
 	if (NtCreateThreadEx == NULL)
