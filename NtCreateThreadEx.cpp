@@ -43,6 +43,19 @@ typedef NTSTATUS(NTAPI * pfnRtlCreateUserThread)(
 
 BOOL InjectDll(UINT32 ProcessId, char *DllFullPath)
 {
+	
+	if (strstr(DllFullPath, "\\\\") != 0)
+	{
+		printf("[!]Wrong Dll path\n");
+		return FALSE;
+	}
+	
+	if (strstr(DllFullPath, "\\") == 0)
+	{
+		printf("[!]Need Dll full path\n");
+		return FALSE;
+	}
+
 	HANDLE ProcessHandle = NULL;
 
 	ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessId);
@@ -102,7 +115,7 @@ BOOL FreeDll(UINT32 ProcessId, char *DllFullPath)
 	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, ProcessId);
 	bMore = Module32First(hSnapshot, &me);
 	for (; bMore; bMore = Module32Next(hSnapshot, &me)) {
-		if (!_tcsicmp((LPCTSTR)me.szModule, DllFullPath) ||!_tcsicmp((LPCTSTR)me.szExePath, DllFullPath)) 
+		if (!_tcsicmp((LPCTSTR)me.szModule, DllFullPath) || !_tcsicmp((LPCTSTR)me.szExePath, DllFullPath))
 		{
 			bFound = TRUE;
 			break;
@@ -112,7 +125,7 @@ BOOL FreeDll(UINT32 ProcessId, char *DllFullPath)
 		CloseHandle(hSnapshot);
 		return FALSE;
 	}
-	
+
 	HANDLE ProcessHandle = NULL;
 
 	ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessId);
@@ -171,7 +184,7 @@ BOOL EnableDebugPrivilege(BOOL fEnable)
 
 int main(int argc, char *argv[])
 {
-	printf("Use NtCreateThreadEx to inject dll\n");
+	printf("Use NtCreateThreadEx to inject dll\n\n");
 	if (!EnableDebugPrivilege(TRUE))
 	{
 		printf("[!]AdjustTokenPrivileges Failed.<%d>\n", GetLastError());
@@ -188,13 +201,12 @@ int main(int argc, char *argv[])
 		printf("[!]InjectDll error \n");
 		return 1;
 	}
-	printf("[+]InjectDll success\n");
-	
+
 	if (!FreeDll((DWORD)atoi(argv[1]), argv[2]))
 	{
 		printf("[!]FreeDll error \n");
 		return 1;
 	}
-	printf("[+]FreeDll success\n");
+	printf("[+]InjectDll success\n");
 	return 0;
 }
