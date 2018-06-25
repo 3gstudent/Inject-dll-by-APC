@@ -15,3 +15,7 @@ https://3gstudent.github.io/3gstudent.github.io/%E9%80%9A%E8%BF%87APC%E5%AE%9E%E
 ### NtCreateThreadEx.cpp:
 
 Use NtCreateThreadEx to inject dll
+
+###  NtCreateThreadEx + LdrLoadDll.cpp
+
+Use NtCreateThreadEx + LdrLoadDll to inject dll
