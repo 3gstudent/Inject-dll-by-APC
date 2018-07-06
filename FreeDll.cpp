@@ -101,7 +101,7 @@ BOOL EnableDebugPrivilege(BOOL fEnable)
 
 int main(int argc, char *argv[])
 {
-	printf("Use NtCreateThreadEx to inject dll\n\n");
+	printf("Use NtCreateThreadEx to free dll\n\n");
 	if (!EnableDebugPrivilege(TRUE))
 	{
 		printf("[!]AdjustTokenPrivileges Failed.<%d>\n", GetLastError());
