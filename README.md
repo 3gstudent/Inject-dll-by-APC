@@ -22,4 +22,4 @@ Use NtCreateThreadEx + LdrLoadDll to inject dll
 
 ###  CreateRemoteThread.cpp
 
-Use CreateRemoteThread to inject dll,usually used under XP
+Use CreateRemoteThread to inject dll,usually used under WinXP
